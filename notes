@@ -1,0 +1,32 @@
+
+pages = get_pages()
+ids = get_ids(pages)
+
+item_urls_base = 'https://groups.freecycle.org/group/WashingtonDC/posts/'
+item_urls = [item_urls_base + id for id in ids]
+item_pages = [requests.get(url) for url in item_urls]
+
+item_soups = [BeautifulSoup(page.text, 'html.parser') for page in item_pages]
+details = [soup.find('div', id="post_details") for soup in item_soups]
+locations = [detail.find('div').text.split(':')[1] for detail in details]
+
+sorted(locations)
+
+
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="my-application")
+location = geolocator.geocode("Rhode Island ave DC")
+print(location.address)
+
+geolocator = Nominatim(user_agent="my-application")
+
+
+# To do
+# Refactor with scrapy
+# Learn geopy
+# Create a class for the scrapped object
+# Post.id
+# Post.description
+# Post.title
+# Post.location (coordinates)
+# Post.address (from webpage?) and from geopy

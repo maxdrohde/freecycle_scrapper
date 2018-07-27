@@ -1,2 +1,2 @@
 # freecycle_scrapper
-Scripts to scrape information from Freecycle / TrashNothing
+Scripts to scrape information from Freecycle
