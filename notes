@@ -30,3 +30,5 @@ geolocator = Nominatim(user_agent="my-application")
 # Post.title
 # Post.location (coordinates)
 # Post.address (from webpage?) and from geopy
+
+# Use datetime to sort / filter by date 
