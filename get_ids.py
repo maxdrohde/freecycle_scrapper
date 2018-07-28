@@ -4,6 +4,10 @@ from bs4 import BeautifulSoup
 from tools import make_alpha, make_numeric
 
 def get_ids():
+    '''
+    Gets all the current post IDs from FreeCycle
+    Returns a list of str
+    '''
     base = 'https://groups.freecycle.org/group/WashingtonDC/posts/offer?page='
     urls = [base + str(i+1) for i in range(20)]
     # Request the pages
