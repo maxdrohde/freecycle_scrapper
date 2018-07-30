@@ -1,25 +1,25 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from tools import make_alpha, make_numeric
+from tools import make_alpha, make_numeric, flatten
+import concurrent.futures
+
+def generate_urls():
+    base = 'https://groups.freecycle.org/group/WashingtonDC/posts/offer?page='
+    urls = [base + str(i+1) for i in range(50)]
+    return urls
+
+def get_ids_from_url(url):
+    page = requests.get(url)
+    text = page.text
+    pattern = re.compile('\(\#\d{1,10}\)')
+    page_ids = re.findall(pattern,text)
+    page_ids = [make_numeric(id) for id in page_ids]
+    return page_ids
 
 def get_ids():
-    '''
-    Gets all the current post IDs from FreeCycle
-    Returns a list of str
-    '''
-    base = 'https://groups.freecycle.org/group/WashingtonDC/posts/offer?page='
-    urls = [base + str(i+1) for i in range(20)]
-    # Request the pages
-    pages = [requests.get(url) for url in urls]
-    # Get the text from each page
-    texts = [page.text for page in pages]
-    # REGEX patterns for IDs
-    pattern = re.compile('\(\#\d{1,10}\)')
-    # Find the post ids
-    ids = [re.findall(pattern,text) for text in texts]
-    # Flatten the list
-    ids = [item for sublist in ids for item in sublist]
-    ids = [make_numeric(id) for id in ids]
-    ids = list(set(ids))
-    return ids
+    urls = generate_urls()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        post_ids = list(executor.map(get_ids_from_url, urls))
+    post_ids = list(flatten(post_ids))
+    return post_ids

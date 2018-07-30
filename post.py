@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from get_ids import get_ids
 from parse_soup import get_description, get_title, get_location_and_date
+from dateutil import parser
 
 BASE_STRING = 'https://groups.freecycle.org/group/WashingtonDC/posts/'
 
@@ -19,6 +20,11 @@ class Post():
         location_date = get_location_and_date(self.soup)
         self.location = location_date[0]
         self.date = location_date[1]
+
+        try:
+            self.parsed_date = parser.parse(self.date)
+        except:
+            self.parsed_date = None
 
         self.description = get_description(self.soup)
         self.title = get_title(self.soup)
