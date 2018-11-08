@@ -31,7 +31,6 @@ class Post():
 
         self.coordinates = None
 
-
     def __repr__(self):
         return(f'Title: {self.title} | Location: {self.location} | ID: {self.id} | Date: {self.date}')
 
