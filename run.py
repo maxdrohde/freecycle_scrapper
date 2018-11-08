@@ -8,7 +8,7 @@ def load_post(post_id):
 post_ids = get_ids()
 
 with concurrent.futures.ThreadPoolExecutor() as executor:
-    posts = list(executor.map(load_post, post_ids))
+    posts = list(tqdm(executor.map(load_post, post_ids), total=len(post_ids)))
 
 import datetime
 import pandas as pd
